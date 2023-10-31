@@ -136,8 +136,6 @@ update account set balance = #{left_balance} ,version = version+1 where version
 这种方式适合并发不高的场景，一般需要设置一下重试的次数。
 ### 基于Redis的分布式锁
 
-
-
 Redis实现分布式锁一般有以下几种方式
 - setnx + expire。
 - setnx + value值是过期时间。
