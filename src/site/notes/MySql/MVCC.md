@@ -41,7 +41,7 @@ MVCC 通过创建数据的多个版本和使用快照读取来实现并发控制
 
 在 `Repeatable Read` 和 `Read Committed` 两个隔离级别下，如果是执行普通的 `select` 语句（不包括 `select ... lock in share mode` ,`select ... for update`）则会使用 `一致性非锁定读（MVCC）`。并且在 `Repeatable Read` 下 `MVCC` 实现了可重复读和防止部分幻读
 
-### [](#锁定读)锁定读
+### 锁定读
 
 如果执行的是下列语句，就是 [**锁定读（Locking Reads）**open in new window](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html)
 
