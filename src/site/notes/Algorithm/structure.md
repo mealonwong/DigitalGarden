@@ -2,7 +2,240 @@
 {"dg-publish":true,"permalink":"/algorithm/structure/"}
 ---
 
+## LRU缓存
 
+```Java
+import java.util.HashMap;  
+import java.util.Map;  
+  
+class LRUCache {  
+  
+    private Map<Integer,Node> map;  
+    private DoubleList cache;  
+    private int capacity;  
+  
+    public LRUCache(int capacity){  
+        map = new HashMap<>();  
+        cache = new DoubleList();  
+        this.capacity = capacity;  
+    }  
+  
+    public int get(int key){  
+        if(!map.containsKey(key)){  
+            return -1;  
+        }  
+        int val = map.get(key).val;  
+        //利用put方法将数据提前  
+        put(key,val);  
+        return val;  
+    }  
+  
+    public void put(int key,int val){  
+        Node node = new Node(key,val);  
+        if(map.containsKey(key)){  
+            cache.remove(map.get(key));  
+            cache.addFirst(node);  
+            //更新map中对应的数据  
+            map.put(key,node);  
+        }else{  
+            if(capacity==cache.size()){  
+                Node last = cache.removeLast();  
+                map.remove(last.key);  
+            }  
+            cache.addFirst(node);  
+            map.put(key,node);  
+        }  
+  
+    }  
+}  
+/**双向链表节点类*/  
+class Node{  
+    int key;  
+    int val;  
+    Node prev;  
+    Node next;  
+    public Node(int key,int val){  
+        this.key=key;  
+        this.val=val;  
+    }  
+}  
+  
+/**  
+ * 双向链表的简单操作实现  
+ * @author 奥特曼打小怪兽  
+ */  
+class DoubleList {  
+  
+    private Node head;  
+    private Node tail;  
+    private int size;  
+  
+    public DoubleList(){  
+        head = new Node(0,0);  
+        tail = new Node(0,0);  
+        head.next=tail;  
+        tail.prev=head;  
+        size=0;  
+    }  
+  
+    public void addFirst(Node node){  
+        node.next = head.next;  
+        node.prev = head;  
+        head.next.prev = node;  
+        head.next = node;  
+        size++;  
+    }  
+  
+    public void remove(Node node){  
+        node.prev.next = node.next;  
+        node.next.prev = node.prev;  
+        size--;  
+    }  
+  
+    /**删除最后一个节点，并返回该节点*/  
+    public Node removeLast(){  
+        if(tail.prev==head){  
+            return null;  
+        }  
+        Node last = tail.prev;  
+        remove(last);  
+        return last;  
+    }  
+  
+    public int size(){  
+        return size;  
+    }  
+}
+```
+
+
+
+## LFU
+
+```Java
+class Node{  
+    int key;  
+    int value;  
+    int freq=1;  
+  
+    public Node(){}  
+  
+    public Node(int key,int value){  
+        this.key=key;  
+        this.value = value;  
+    }  
+}  
+class LFUCache {  
+  
+    /**内容缓存*/  
+    private Map<Integer,Node> cache;  
+    /**存储每个频次对应的双向链表*/  
+    private Map<Integer, LinkedHashSet<Node>> freqMap;  
+    /**缓存容量*/  
+    private int capacity;  
+    /**记录最小频次*/  
+    private int minFreq;  
+    /**记录缓存中的数据个数*/  
+    private int size;  
+  
+    public LFUCache(int capacity) {  
+        cache = new HashMap<>(capacity);  
+        freqMap = new HashMap<>();  
+        this.capacity = capacity;  
+    }  
+  
+    /**  
+     * 获得key对应的值  
+     * @param key  
+     * @return  
+     */  
+    public int get(int key) {  
+        Node node = cache.get(key);  
+        if(node==null){  
+            return -1;  
+        }  
+        freqInc(node);  
+        return node.value;  
+    }  
+  
+    /**  
+     * 存入新的键值对  
+     * 如果键已存在，则变更其值；如果键不存在，请插入键值对。  
+     * 当缓存达到其容量时。则应该在插入新项之前，使最不经常使用的项无效。  
+     * 在此问题中，当存在平局（即两个或更多个键具有相同使用频率）时，应该去除最久未使用的键。  
+     * @param key  
+     * @param value  
+     */  
+    public void put(int key, int value) {  
+        if(capacity==0){  
+            return;  
+        }  
+        Node node = cache.get(key);  
+        if(node!=null){  
+            node.value = value;  
+            freqInc(node);  
+        }else{  
+            if(size==capacity){  
+                Node deadNode = deleteNode();  
+                cache.remove(deadNode.key);  
+                size--;  
+            }  
+            Node newNode = new Node(key,value);  
+            cache.put(key,newNode);  
+            addNode(newNode);  
+            size++;  
+        }  
+  
+    }  
+  
+    /**  
+     * 更新频次以及最小值  
+     * @param node  
+     */  
+    private void freqInc(Node node){  
+        //从原freq对应的set中移除掉node，并更新minFreq  
+        int freq = node.freq;  
+        LinkedHashSet<Node> set = freqMap.get(freq);  
+        set.remove(node);  
+        if(freq==minFreq&&set.size()==0){  
+            minFreq = freq+1;  
+        }  
+        //加入新的freq对应的双向链表  
+        node.freq++;  
+        LinkedHashSet<Node> newSet = freqMap.get(freq+1);  
+        if(newSet==null){  
+            newSet = new LinkedHashSet<>();  
+            freqMap.put(freq+1,newSet);  
+        }  
+        newSet.add(node);  
+    }  
+  
+    /**  
+     * 添加一个节点  
+     * @param node  
+     */  
+    private void addNode(Node node){  
+        LinkedHashSet<Node> set = freqMap.get(1);  
+        if(set==null){  
+            set = new LinkedHashSet<>();  
+            freqMap.put(1,set);  
+        }  
+        set.add(node);  
+        minFreq = 1;  
+    }  
+  
+    /**  
+     * 删除一个节点，即清除掉一个最久未使用数据  
+     * @return  
+     */  
+    private Node deleteNode(){  
+        LinkedHashSet<Node> set = freqMap.get(minFreq);  
+        Node deadNode = set.iterator().next();  
+        set.remove(deadNode);  
+        return deadNode;  
+    }  
+}
+```
 ## skipList
 
 ```Java
