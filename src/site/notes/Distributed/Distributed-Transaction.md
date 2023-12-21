@@ -52,7 +52,7 @@ BASE 理论指的是基本可用 Basically Available，软状态 Soft State，�
 BASE，Basically Available Soft State Eventual Consistency 的简写：  
 BA：Basically Available 基本可用，分布式系统在出现故障的时候，允许损失部分可用性，即保证核心可用。  
 S：Soft State 软状态，允许系统存在中间状态，而该中间状态不会影响系统整体可用性。  
-E：Consistency 最终一致性，系统中的所有数据副本经过一定时间后，最终能够达到一致的状态。  
+E：Eventual Consistency 最终一致性，系统中的所有数据副本经过一定时间后，最终能够达到一致的状态。  
 BASE 理论本质上是对 CAP 理论的延伸，是对 CAP 中 AP 方案的一个补充。
 
 ## 柔性事务
