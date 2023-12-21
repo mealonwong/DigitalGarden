@@ -1,5 +1,5 @@
 ---
-{"dg-publish":true,"dg-permalink":"Redis面试热点","permalink":"/Redis面试热点/"}
+{"dg-publish":true,"permalink":"/redis/redis/"}
 ---
 
 ### 缓存穿透
