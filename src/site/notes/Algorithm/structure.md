@@ -393,3 +393,82 @@ class Solution {
     }  
 }
 ```
+
+## 字典树
+```Java
+class TrieNode {  
+    // 存储节点的孩子节点  
+    TrieNode[] children;  
+    // 标记该节点是否为一个单词的结束  
+    boolean isEndOfWord;  
+  
+    // 构造函数  
+    public TrieNode() {  
+        // 初始化孩子节点数组，大小为26，表示26个英文字母  
+        children = new TrieNode[26];  
+        isEndOfWord = false;  
+    }  
+}  
+  
+class Trie {  
+    private TrieNode root;  
+  
+    // 构造函数  
+    public Trie() {  
+        root = new TrieNode();  
+    }  
+  
+    // 插入一个单词到字典树中  
+    public void insert(String word) {  
+        TrieNode current = root;  
+        // 遍历单词中的每一个字符  
+        for (int i = 0; i < word.length(); i++) {  
+            char ch = word.charAt(i);  
+            int index = ch - 'a';  
+            // 如果当前字符的节点不存在，创建一个新的节点  
+            if (current.children[index] == null) {  
+                current.children[index] = new TrieNode();  
+            }  
+            // 移动到下一个节点  
+            current = current.children[index];  
+        }  
+        // 标记当前节点为一个单词的结束  
+        current.isEndOfWord = true;  
+    }  
+  
+    // 搜索一个单词是否在字典树中  
+    public boolean search(String word) {  
+        TrieNode current = root;  
+        // 遍历单词中的每一个字符  
+        for (int i = 0; i < word.length(); i++) {  
+            char ch = word.charAt(i);  
+            int index = ch - 'a';  
+            // 如果当前字符的节点不存在，返回false  
+            if (current.children[index] == null) {  
+                return false;  
+            }  
+            // 移动到下一个节点  
+            current = current.children[index];  
+        }  
+        // 检查最后一个节点是否标记为一个单词的结束  
+        return current != null && current.isEndOfWord;  
+    }  
+  
+    // 判断是否存在以给定前缀开头的单词  
+    public boolean startsWith(String prefix) {  
+        TrieNode current = root;  
+        // 遍历前缀中的每一个字符  
+        for (int i = 0; i < prefix.length(); i++) {  
+            char ch = prefix.charAt(i);  
+            int index = ch - 'a';  
+            // 如果当前字符的节点不存在，返回false  
+            if (current.children[index] == null) {  
+                return false;  
+            }  
+            // 移动到下一个节点  
+            current = current.children[index];  
+        }  
+        return true;  
+    }  
+}
+```
