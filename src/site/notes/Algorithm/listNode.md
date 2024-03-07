@@ -117,3 +117,38 @@ class Solution {
     }  
 }
 ```
+
+## [随机链表的复制](https://leetcode.cn/problems/copy-list-with-random-pointer/)
+```Java
+  
+/*  
+// Definition for a Node.  
+class Node {  
+    int val;    Node next;    Node random;  
+    public Node(int val) {        this.val = val;        this.next = null;        this.random = null;    }}  
+*/  
+  
+class Solution {  
+    public Node copyRandomList(Node head) {  
+        if(head == null){  
+            return null;  
+        }  
+        for(Node node = head;node!=null;node=node.next.next){  
+            Node newNode = new Node(node.val);  
+            newNode.next = node.next;  
+            node.next = newNode;  
+        }  
+        for(Node node=head;node!=null;node=node.next.next){  
+            Node newNode = node.next;  
+            newNode.random = (node.random!=null)?node.random.next:null;  
+        }  
+        Node headNew = head.next;  
+        for(Node node = head;node!=null;node=node.next){  
+            Node newNode = node.next;  
+            node.next=newNode.next;  
+            newNode.next = (newNode.next!=null)?newNode.next.next:null;  
+        }  
+        return headNew;  
+    }  
+}
+```
