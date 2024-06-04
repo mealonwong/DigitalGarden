@@ -21,15 +21,15 @@ public void methodA(){
 
 ## Spring中事务的七种传播行为
 
-   | 事务传播行为类型 | 说明 |
-   | ------ | ------ |
-   | PROPAGATION_REQUIRED | 如果当前没有事务，就新建一个事务；如果当前存在事务，就加入到当前事务中。最常用|
-   | PROPAGATION_SUPPORTS| 支持当前事务，如果当前没有事务，就以非事务形式运行
-   | PROPAGATION_MANDATORY |  使用当前事务，如果当前不存在事务，则抛出异常
-   | PROPAGATION_REQUIRES_NEW |  新建事务，如果当前存在事务，则将当前事务挂起
-   | PROPAGATION_NOT_SUPPORTED |  以非事务方式运行，如果当前存在事务，则挂起当前事务
-   | PROPAGATION_NEVER|  以非事务方式运行，如果当前存在事务，则抛出异常
-   | PROPAGATION_NESTED|  如果当前存在事务，则在嵌套事务内执行。如果当前不存在事务，则执行与PROPAGATION_REQUIRED类似
+|     | 事务传播行为类型                  | 说明                                                      |
+| --- | ------------------------- | ------------------------------------------------------- |
+|     | PROPAGATION_REQUIRED      | 如果当前没有事务，就新建一个事务；如果当前存在事务，就加入到当前事务中。最常用                 |
+|     | PROPAGATION_SUPPORTS      | 支持当前事务，如果当前没有事务，就以非事务形式运行                               |
+|     | PROPAGATION_MANDATORY     | 使用当前事务，如果当前不存在事务，则抛出异常                                  |
+|     | PROPAGATION_REQUIRES_NEW  | 新建事务，如果当前存在事务，则将当前事务挂起                                  |
+|     | PROPAGATION_NOT_SUPPORTED | 以非事务方式运行，如果当前存在事务，则挂起当前事务                               |
+|     | PROPAGATION_NEVER         | 以非事务方式运行，如果当前存在事务，则抛出异常                                 |
+|     | PROPAGATION_NESTED        | 如果当前存在事务，则在嵌套事务内执行。如果当前不存在事务，则执行与PROPAGATION_REQUIRED类似 |
    
    
 注意点：
