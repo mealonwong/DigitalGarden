@@ -2,6 +2,7 @@
 {"dg-publish":true,"permalink":"/java/multi-thread/count-down-latch-cyclic-barrier-semaphore/"}
 ---
 
+`
 ## CountDownLatch
 
 > CountDownLatch是一个辅助器，允许一个或多个线程一直等待，直到一组线程全部准备就绪后同步执行，并互相等待其他线程的操作执行完成。
